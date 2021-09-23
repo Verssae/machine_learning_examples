@@ -63,7 +63,6 @@ it = 0
 while it < CONVERGANCE:
     states, rewards = play(grid)
     G = 0
-
     for t in range(len(rewards)-2, -1, -1):
         G = rewards[t+1] + GAMMA*G
         if states[t] not in states[:t]:
@@ -72,10 +71,9 @@ while it < CONVERGANCE:
             Q[(s, a)] = np.mean(returns[(s, a)])
             sas = list(filter(lambda e: e[0] == s, list(Q)))
             acts = list(map(lambda e: e[1], sas))
-            # print(f'before: {policy[s]}')
             policy[s] = acts[np.argmax([Q[k] for k in sas])]
-            # print(f'after: {policy[s]}')
     it += 1
 
 print(Q)
 print_policy(policy, grid)
+
