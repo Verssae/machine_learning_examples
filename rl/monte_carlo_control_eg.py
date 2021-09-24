@@ -2,78 +2,83 @@ from iterative_policy_evaluation_deterministic import SMALL_ENOUGH, print_policy
 import numpy as np
 import random
 from grid_world import standard_grid, negative_grid, ACTION_SPACE
- 
+from functools import reduce
+import matplotlib.pyplot as plt
 
-CONVERGANCE = 100
+CONVERGANCE = 10000
 GAMMA = 0.9
 
-grid = standard_grid()
-Q = {}
-returns = {}
-for s, values in grid.actions.items():
-    for a in values:
-        returns[(s, a)] = []
-        Q[(s, a)] = 0
-
-print(returns)
-print(Q)
-policy = {}
-for s, values in grid.actions.items():
-    policy[s] = random.choice(values)
-
-
-print_values(grid.rewards, grid)
-print("\n")
-
-def play(grid, max_steps=20):
+def play(grid, policy, max_steps=20):
     print_policy(policy, grid) 
 
-    states = []
-    rewards = []
+    grid.set_state(random.choice(list(grid.actions.keys())))
+    s = grid.current_state()
+    a = random.choice(ACTION_SPACE)
 
-    s, a = random.choice(list(Q.keys()))
-    grid.set_state(s)
-    rewards.append(0)
-
+    states = [s]
+    actions = [a]
+    rewards = [0]
     
-    r = grid.move(a)
-
-
-    states.append((s, a))
-    rewards.append(r)
-
-    steps = 0
-    while not grid.game_over():
-        
-        s = grid.current_state()
-        a = policy[s]
-        states.append((s, a))
-
+    for _ in range(max_steps):
         r = grid.move(a)
+        s = grid.current_state()
+
+        states.append(s)
         rewards.append(r)
 
-        steps += 1
-        if steps >= max_steps:
+        if grid.game_over():
             break
-    # r = grid.rewards.get(s, 0)
-    # rewards.append(r)
-    return states, rewards
+        else:
+            a = policy[s]
+            actions.append(a)
 
-it = 0
-while it < CONVERGANCE:
-    states, rewards = play(grid)
-    G = 0
-    for t in range(len(rewards)-2, -1, -1):
-        G = rewards[t+1] + GAMMA*G
-        if states[t] not in states[:t]:
-            s, a = states[t]
-            returns[(s, a)].append(G)
-            Q[(s, a)] = np.mean(returns[(s, a)])
-            sas = list(filter(lambda e: e[0] == s, list(Q)))
-            acts = list(map(lambda e: e[1], sas))
-            policy[s] = acts[np.argmax([Q[k] for k in sas])]
-    it += 1
+    return states, actions, rewards
 
-print(Q)
-print_policy(policy, grid)
+def max_dict(dict):
+    return reduce(lambda acc, cur: cur if cur[1] > acc[1] else acc, list(dict.items()), list(dict.items())[0])
+
+if __name__ == "__main__":
+    grid = standard_grid()
+    Q = {}
+    returns = {}
+    for s in grid.actions:
+        Q[s] = {}
+        returns[s] = {}
+        for a in ACTION_SPACE:
+            Q[s][a] = 0
+            returns[s][a] = []
+
+    policy = {}
+    for s in grid.actions:
+        policy[s] = random.choice(ACTION_SPACE)
+
+
+    print_values(grid.rewards, grid)
+    print("\n")
+    
+    
+    deltas = []
+    for i in range(CONVERGANCE):
+        biggest_change = 0
+        states, actions, rewards = play(grid, policy)
+        G = 0
+        for t in range(len(rewards)-2, -1, -1):
+            G = rewards[t+1] + GAMMA*G
+            if (states[t] not in states[:t]) and (actions[t] not in actions[:t]):
+                s, a = states[t], actions[t]
+                returns[s][a].append(G)
+                old_Q = Q[s][a]
+                Q[s][a] = np.mean(returns[s][a])
+                policy[s] = max_dict(Q[s])[0]
+                biggest_change = max(biggest_change, np.abs(old_Q - Q[s][a]))
+        deltas.append(biggest_change)
+
+    plt.plot(deltas)
+    plt.show()
+    V = {}
+    for s, Qs in Q.items():
+        V[s] = max_dict(Q[s])[1]
+
+    print_values(V, grid)
+    print_policy(policy, grid)
 
