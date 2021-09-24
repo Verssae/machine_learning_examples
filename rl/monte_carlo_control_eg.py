@@ -8,12 +8,18 @@ import matplotlib.pyplot as plt
 CONVERGANCE = 10000
 GAMMA = 0.9
 
+def epsilon_greedy(policy, s, eps=0.1):
+    if np.random.random() < eps:
+        return random.choice(ACTION_SPACE)
+    else:
+        return policy[s]
+
 def play(grid, policy, max_steps=20):
-    print_policy(policy, grid) 
+    # print_policy(policy, grid) 
 
     grid.set_state(random.choice(list(grid.actions.keys())))
     s = grid.current_state()
-    a = random.choice(ACTION_SPACE)
+    a = policy[s]
 
     states = [s]
     actions = [a]
@@ -29,7 +35,7 @@ def play(grid, policy, max_steps=20):
         if grid.game_over():
             break
         else:
-            a = policy[s]
+            a = epsilon_greedy(policy, s)
             actions.append(a)
 
     return states, actions, rewards
