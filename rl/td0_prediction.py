@@ -9,7 +9,7 @@ from builtins import range
 import numpy as np
 import matplotlib.pyplot as plt
 from grid_world import standard_grid, negative_grid
-from iterative_policy_evaluation import print_values, print_policy
+from iterative_policy_evaluation_deterministic import print_values, print_policy
 
 SMALL_ENOUGH = 1e-3
 GAMMA = 0.9
@@ -48,6 +48,10 @@ if __name__ == '__main__':
     (2, 2): 'R',
     (2, 3): 'U',
   }
+
+  policy = {}
+  for s in grid.actions:
+      policy[s] = np.random.choice(grid.actions.get(s))
 
   # initialize V(s) and returns
   V = {}
