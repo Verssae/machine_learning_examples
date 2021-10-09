@@ -5,6 +5,7 @@ from approx_prediction import ALL_POSSIBLE_ACTIONS, ALPHA, GAMMA, epsilon_greedy
 from grid_world import standard_grid, negative_grid
 from iterative_policy_evaluation_deterministic import print_policy, print_values
 from sklearn.kernel_approximation import Nystroem, RBFSampler
+import pandas as pd
 
 GAMMA = 0.9
 ALPHA = 0.1
@@ -12,10 +13,10 @@ ALL_POSSIBLE_ACTIONS = ('U', 'D', 'R', 'L')
 ACTION2INT = {a: i for i, a in enumerate(ALL_POSSIBLE_ACTIONS)}
 INT2ONEHOT = np.eye(len(ALL_POSSIBLE_ACTIONS))
 
-def epsilon_greedy(greedy, s, eps=0.1):
+def epsilon_greedy(model, s, eps=0.1):
 	p = np.random.random()
 	if p < (1 - eps):
-		return greedy[s]
+		return model.max_q(s, args=True)
 	else:
 		return np.random.choice(ALL_POSSIBLE_ACTIONS)
 
@@ -74,20 +75,10 @@ if __name__ == '__main__':
 	print('rewards:')
 	print_values(grid.rewards, grid)
 
-	greedy_policy = {
-		(2, 0): 'U',
-		(1, 0): 'U',
-		(0, 0): 'R',
-		(0, 1): 'R',
-		(0, 2): 'R',
-		(1, 2): 'R',
-		(2, 1): 'R',
-		(2, 2): 'R',
-		(2, 3): 'U',
-	}
-
 	model = Model(grid)
 	mse_per_episode = []
+	reward_per_episode = []
+	state_visit_count = {}
 
 	n_episodes = 20000
 	for it in range(n_episodes):
@@ -98,11 +89,13 @@ if __name__ == '__main__':
 
 		n_steps = 0
 		episode_err = 0
+		episode_reward = 0
 		while not grid.game_over():
-			a = epsilon_greedy(greedy_policy, s)
+			a = epsilon_greedy(model, s)
 			r = grid.move(a)
 
 			s2 = grid.current_state()
+			state_visit_count[s2] = state_visit_count.get(s2, 0) + 1
 
 			if grid.is_terminal(s2):
 				target = r
@@ -115,14 +108,20 @@ if __name__ == '__main__':
 
 			n_steps += 1
 			episode_err += err * err
+			episode_reward += r
 
 			s = s2
 
+		reward_per_episode.append(episode_reward)
 		mse = episode_err / n_steps
 		mse_per_episode.append(mse)
 	
 	plt.plot(mse_per_episode)
 	plt.title("MSE per episode")
+	plt.show()
+
+	plt.plot(reward_per_episode)
+	plt.title("Reward per episode")
 	plt.show()
 
 	V = {}
@@ -146,5 +145,14 @@ if __name__ == '__main__':
 	
 	print('policy:')
 	print_policy(V, grid)
+
+	print("state_visit_count:")
+	state_sample_count_arr = np.zeros((grid.rows, grid.cols))
+	for i in range(grid.rows):
+		for j in range(grid.cols):
+			if (i, j) in state_visit_count:
+				state_sample_count_arr[i,j] = state_visit_count[(i, j)]
+	df = pd.DataFrame(state_sample_count_arr)
+	print(df)
 
 
