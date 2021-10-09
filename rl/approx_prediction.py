@@ -9,7 +9,7 @@ from builtins import range
 import numpy as np
 import matplotlib.pyplot as plt
 from grid_world import standard_grid, negative_grid
-from iterative_policy_evaluation import print_values, print_policy
+from iterative_policy_evaluation_deterministic import print_values, print_policy
 from sklearn.kernel_approximation import Nystroem, RBFSampler
 
 GAMMA = 0.9
@@ -44,6 +44,7 @@ class Model:
   def __init__(self, grid):
     # fit the featurizer to data
     samples = gather_samples(grid)
+    print(samples[0])
     # self.featurizer = Nystroem()
     self.featurizer = RBFSampler()
     self.featurizer.fit(samples)
