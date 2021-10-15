@@ -7,7 +7,15 @@ Find associated tutorials at https://lazyprogrammer.me
 
 Find associated courses at https://deeplearningcourses.com
 
-Please note that not all code from all courses will be found in this repository. Some newer code examples (e.g. everything from Tensorflow 2.0) were done in Google Colab. Therefore, you should check the instructions given in the lectures for the course you are taking.
+Please note that not all code from all courses will be found in this repository. Some newer code examples (e.g. most of Tensorflow 2.0) were done in Google Colab. Therefore, you should check the instructions given in the lectures for the course you are taking.
+
+
+How to I find the code for a particular course?
+===============================================
+
+The code for each course is separated by folder. You can determine which folder corresponds with which course by watching the "Where to get the code" lecture inside the course (usually Lecture 2 or 3).
+
+Remember: one folder = one course.
 
 
 Why you should not fork this repo
@@ -25,30 +33,46 @@ Beginning with Tensorflow 2, I started to use Google Colab. For those courses, u
 VIP Course Links
 ===================
 
-**Financial Engineering and Artificial Intelligence in Python** (special discount link for full VIP version as of Apr 2021)
+*** Note: if any of these coupons becomes out of date, check my website (https://lazyprogrammer.me) for the latest version. I will probably just keep incrementing them numerically, e.g. FINANCEVIP2, FINANCEVIP3, etc..
 
-*** Note: if this coupon becomes out of date, check my website (https://lazyprogrammer.me) for the latest version. I will probably just keep incrementing them numerically, e.g. FINANCEVIP2, FINANCEVIP3, etc..
+**Time Series Analysis, Forecasting, and Machine Learning**
 
-https://www.udemy.com/course/ai-finance/?couponCode=FINANCEVIP7
-
-
-**PyTorch: Deep Learning and Artificial Intelligence** (special discount link for full VIP course as of Apr 2021)
-
-*** Note: if this coupon becomes out of date, check my website (https://lazyprogrammer.me) for the latest version. I will probably just keep incrementing them numerically, e.g. PYTORCHVIP6, PYTORCHVIP7, etc..
-
-https://www.udemy.com/course/pytorch-deep-learning/?couponCode=PYTORCHVIP12
+https://www.udemy.com/course/time-series-analysis/?couponCode=TIMEVIP4
 
 
-**Tensorflow 2.0: Deep Learning and Artificial Intelligence** (VIP Content Only)
+**Financial Engineering and Artificial Intelligence in Python**
+
+https://www.udemy.com/course/ai-finance/?couponCode=FINANCEVIP13
+
+
+**PyTorch: Deep Learning and Artificial Intelligence**
+
+https://www.udemy.com/course/pytorch-deep-learning/?couponCode=PYTORCHVIP18
+
+
+**Tensorflow 2.0: Deep Learning and Artificial Intelligence** (VIP Version)
 https://deeplearningcourses.com/c/deep-learning-tensorflow-2
+
+
+
+Deep Learning Courses Exclusives
+================================
+
+Classical Statistical Inference and A/B Testing in Python
+https://deeplearningcourses.com/c/statistical-inference-in-python
+
+Linear Programming for Linear Regression in Python
+https://deeplearningcourses.com/c/linear-programming-python
+
+MATLAB for Students, Engineers, and Professionals in STEM
+https://deeplearningcourses.com/c/matlab
 
 
 
 Other Course Links
 ==================
 
-Tensorflow 2.0: Deep Learning and Artificial Intelligence
-(Main Course - special discount link)
+Tensorflow 2.0: Deep Learning and Artificial Intelligence (non-VIP version)
 https://www.udemy.com/course/deep-learning-tensorflow-2/?referralCode=E10B72D3848AB70FE1B8
 
 Cutting-Edge AI: Deep Reinforcement Learning in Python
