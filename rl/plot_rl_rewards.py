@@ -2,7 +2,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 import argparse
 from discord_webhook import DiscordWebhook, DiscordEmbed
+import os
+from dotenv import load_dotenv
 
+load_dotenv(verbose=True)
+
+url = os.getenv('URL')
+print(url)
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-m', '--mode', type=str, required=True,
@@ -23,7 +29,7 @@ else:
 plt.title(args.mode)
 plt.savefig('result.png', dpi=300)
 
-webhook = DiscordWebhook(url='https://discord.com/api/webhooks/897394549129875496/zHsQBzzvbmqzMRXyolNoETpv6HmBS6-RMz_cP5AOIgDrqTr6kGXcOmECTsH8VVhnXL1V',content='Message', username="학습 종료")
+webhook = DiscordWebhook(url=url)
 
 embed = DiscordEmbed(title='Plot', description='Reward', color='03b2f8')
 
